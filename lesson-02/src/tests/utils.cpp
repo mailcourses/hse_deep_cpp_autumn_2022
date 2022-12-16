@@ -2,6 +2,9 @@
 
 #include "utils.hpp"
 
+namespace utils
+{
+
 double avg(int *arr, size_t size)
 {
     int sum = 0;
@@ -11,3 +14,5 @@ double avg(int *arr, size_t size)
     }
     return static_cast<double>( sum ) / size;
 }
+
+} // namespace utils

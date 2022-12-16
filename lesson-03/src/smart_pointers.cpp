@@ -1,7 +1,7 @@
 #include <iostream>
 #include <memory>
 
-void init_foo( char *str )
+void init_foo( char * /*str*/ )
 {
     // что-то делаем.
 }
@@ -25,10 +25,10 @@ private:
 
 int main()
 {
-    char *ch_ptr = new char;
-    *ch_ptr = 'z';
-    // 
-    {
+    // std::auto_ptr is deprecated
+    { /*
+        char *ch_ptr = new char;
+        *ch_ptr = 'z';
         std::auto_ptr<char> ptr(ch_ptr);
         std::cout << "ptr=" << *ptr << std::endl;
         std::auto_ptr<char> ptr1(new char);
@@ -37,7 +37,16 @@ int main()
         std::cout << "ptr3=" << *ptr3 << std::endl;
         // Будет Segmentation fault
         //std::cout << "ptr=" << *ptr << std::endl;
+      */
     }
+
+    {
+        // Начиная с C++17
+        std::shared_ptr<char[]> ptr1(new char[20]);
+        // До C++17
+        std::shared_ptr<char> ptr2(new char[20], std::default_delete<char[]>());
+    }
+
     // у ch_ptr память уже оcвобождена.
     //init_foo( str );
     {
@@ -61,7 +70,6 @@ int main()
             // Будет Ошибка сегментирования.
             //std::cout << "unique ptr1 = " <<  *ptr1 << std::endl;
         }
-        //std::cout << "unique ptr1 after = " <<  *ptr1 << std::endl;
     }
 }
 

@@ -14,7 +14,7 @@ protected:
 TEST(TestUtils, test_avg)
 {
     int arr[5] = {1,2,3,4,5};
-    double actual = avg(arr, 5);
+    double actual = utils::avg(arr, 5);
     ASSERT_EQ( actual, 3.f );
 }
 
@@ -22,7 +22,7 @@ TEST(TestUtils, test_avg)
 TEST(TestUtils, test_avg_failed)
 {
     int arr[5] = {1,2,3,4,5};
-    double actual = avg(arr, 5);
+    double actual = utils::avg(arr, 5);
     ASSERT_EQ( actual, 2.f );
 }
 

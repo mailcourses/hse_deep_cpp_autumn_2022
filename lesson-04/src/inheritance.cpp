@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 /*
     A
@@ -16,10 +17,13 @@ public:
         std::cout << "Ctor Animal" << std::endl;
     }
 
-    ~Animal()
+    virtual ~Animal()
     {
         std::cout << "Dtor Animal" << std::endl;
     }
+
+    virtual void bark() = 0;
+    virtual void sleep() = 0;
 public:
     uint32_t age{10};
 };
@@ -32,14 +36,16 @@ public:
         std::cout << "Ctor Mammal" << std::endl;
     }
 
-    ~Mammal()
+    virtual ~Mammal()
     {
         std::cout << "Dtor Mammal" << std::endl;
     }
 
-    void bark() {
+    virtual void bark() {
         std::cout << "he-he" << std::endl;
     }
+
+    virtual void sleep() override {}
 /*
  * public:
  *  uint8_t age{0};
@@ -60,7 +66,7 @@ struct Dog
 
 };
 
-struct Daschund : Dog, Mammal
+struct Daschund : Dog, public Mammal
 {
     Daschund()
     {
@@ -72,12 +78,12 @@ struct Daschund : Dog, Mammal
         std::cout << "Ctor Daschund" << std::endl;
     }
 
-    ~Daschund()
+    virtual ~Daschund()
     {
         std::cout << "Dtor Daschund" << std::endl;
     }
 
-    void bark() {
+    virtual void bark() override {
         std::cout << "Wow-wow" << std::endl;
     }
 
@@ -94,29 +100,68 @@ struct Daschund : Dog, Mammal
     std::string name;
 };
 
-int ark(Mammal *mammal)
+int push_to_ark(Animal *animal)
 {
-    mammal->bark();
+    animal->bark();
+    animal->sleep();
     return 0;
+}
+
+class Ape : public Mammal
+{
+public:
+    virtual void bark() override {
+        std::cout << "Uuu-aaa" << std::endl;
+    }
+
+    Ape() {
+        std::cout << "Ctor Ape" << std::endl;
+    }
+
+    virtual ~Ape() {
+        std::cout << "Dtor Ape" << std::endl;
+    }
+};
+
+Animal * GenerateMammal(int i)
+{
+    if (i == 0)
+    {
+        return new Daschund();
+    }
+    return new Ape();
 }
 
 int main()
 {
-    Animal animal;
+    //Animal animal;
 
     std::cout << "=====" << std::endl;
     Mammal mammal;
 
 
-    std::cout << "Animal.age = " << animal.age << std::endl;
+    //std::cout << "Animal.age = " << animal.age << std::endl;
     std::cout << "Mammal.age=" << mammal.age << std::endl;
 
     std::cout << "=====" << std::endl;
     Daschund dog;
     dog.bark();
-    Mammal *mammal_dog = new Daschund();
-    std::cout << "===== Before ark ====" << std::endl;
-    ark(mammal_dog);
+    //Mammal *mammal_dog = new Daschund();
+
+    //! Добавляем животных в ковчег.
+    std::vector<Animal *> mammals;
+    mammals.push_back( GenerateMammal(0) );
+    mammals.push_back( GenerateMammal(1) );
+
+    std::cout << "===== sizeof(Mammal)" << sizeof(Mammal) << std::endl;
+    std::cout << "=====" << std::endl;
+    for (size_t i = 0; i < mammals.size(); ++i)
+    {
+        std::cout << "Pushing to ark #" << i << std::endl;
+        push_to_ark(mammals[i]);
+        delete mammals[i];
+    }
+    std::cout << "=====" << std::endl;
 
     Daschund roxana("Roxana");
     Daschund mortimer("Mortimer");
