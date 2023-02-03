@@ -45,6 +45,13 @@ void foo(Base *obj)
     }
 }
 
+struct A
+{
+    explicit A(bool) {}
+    A(const A&) {}
+    void foo() {}
+};
+
 int main()
 {
     std::vector<Base *> objs;
@@ -54,5 +61,8 @@ int main()
     {
         foo( objs[i] );
     }
+
+    A y = A(2.0f);
+    y.foo();
     return 0;
 }
