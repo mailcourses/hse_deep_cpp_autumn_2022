@@ -1,0 +1,5 @@
+cffi==1.15.1
+Cython==0.29.33
+pycparser==2.21
+ujson==4.3.0
+utils==1.0.0
