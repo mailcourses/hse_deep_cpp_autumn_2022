@@ -8,7 +8,40 @@
     * Значением может выступать либо число, либо строка. Если захотелось приключений, то можно сделать поддержку и других типов;
     * Возвращать мы должны объект типа dict. Например, это можно сделать так:
         ```C
-        return Py_BuildValue("{s:i,s:s}", "hello", 10, "world", "value");
+        PyObject *dict = NULL;
+        if (!(dict = PyDict_New())) {
+            printf("ERROR: Failed to create Dict Object\n");
+            return NULL;
+        }
+
+        PyObject *key = NULL;
+        PyObject *value = NULL;
+        if (!(key = Py_BuildValue("s", "hello"))) {
+            printf("ERROR: Failed to build string value\n");
+            return NULL;
+        }
+        if (!(value = Py_BuildValue("i", 10))) {
+            printf("ERROR: Failed to build integer value\n");
+            return NULL;
+        }
+        if (PyDict_SetItem(dict, key, value) < 0) {
+            printf("ERROR: Failed to set item\n");
+            return NULL;
+        }
+        if (!(key = Py_BuildValue("s", "world"))) {
+            printf("ERROR: Failed to build string value\n");
+            return NULL;
+        }
+        if (!(value = Py_BuildValue("s", "100500"))) {
+            printf("ERROR: Failed to build string value\n");
+            return NULL;
+        }
+        if (PyDict_SetItem(dict, key, value) < 0) {
+            printf("ERROR: Failed to set item\n");
+            return NULL;
+        }
+
+        return dict;
         ```
 - Методу dumps в качестве аргумента передаётся объект типа dict и возвращает строку. Ограничения как у loads только наоборот;
 
